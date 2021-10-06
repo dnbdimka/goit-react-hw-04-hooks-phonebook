@@ -15,40 +15,36 @@ const initialState = {
 };
 
 const App = () => {
-  const [state, setState] = useState(initialState);
+  const [contacts, setContacts] = useState(initialState.contacts);
+
+  const [filter, setFilter] = useState(initialState.filter);
 
   useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(state.contacts));
+    localStorage.setItem("contacts", JSON.stringify(contacts));
   });
 
   const removeContactById = (id) => {
-    setState((prev) => ({
-      ...prev,
-      contacts: [...prev.contacts.filter((contact) => contact.id !== id)],
-    }));
+    setContacts((prev) => [...prev.filter((contact) => contact.id !== id)]);
   };
 
   const onFilterInput = (e) => {
-    const { value, name } = e.target;
-    setState((prev) => ({ ...prev, [name]: value }));
+    const { value } = e.target;
+    setFilter((prev) => value);
   };
 
   const onAddNewContact = (contact) => {
     if (
-      state.contacts.some((contactState) =>
+      contacts.some((contactState) =>
         contactState.name.toLowerCase().includes(contact.name.toLowerCase())
       )
     ) {
       alert(`${contact.name} is already in contacts.`);
       return;
     }
-    setState((prev) => ({
+    setContacts((prev) => [
       ...prev,
-      contacts: [
-        ...prev.contacts,
-        { name: contact.name, number: contact.number, id: uuidv4() },
-      ],
-    }));
+      { name: contact.name, number: contact.number, id: uuidv4() },
+    ]);
   };
 
   return (
@@ -58,13 +54,13 @@ const App = () => {
         <ContactForm onAddNewContact={onAddNewContact} />
 
         <h2>Contacts</h2>
-        {state.contacts.length !== 0 && (
-          <Filter onFilterInput={onFilterInput} filter={state.filter} />
+        {contacts.length !== 0 && (
+          <Filter onFilterInput={onFilterInput} filter={filter} />
         )}
 
         <ContactList
-          contacts={state.contacts}
-          filterValue={state.filter}
+          contacts={contacts}
+          filterValue={filter}
           removeContactById={removeContactById}
         />
       </div>

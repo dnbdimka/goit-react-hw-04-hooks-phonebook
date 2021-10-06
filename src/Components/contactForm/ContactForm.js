@@ -6,16 +6,16 @@ const initialState = {
 };
 
 const ContactForm = ({ onAddNewContact }) => {
-  const [state, setState] = useState(initialState);
+  const [contact, setContact] = useState(initialState);
   const onHandleChange = (e) => {
     const { value, name } = e.target;
-    setState((prev) => ({ ...prev, [name]: value }));
+    setContact((prev) => ({ ...prev, [name]: value }));
   };
 
   const handelSubmitForm = (e) => {
     e.preventDefault();
-    onAddNewContact(state);
-    setState({ ...initialState });
+    onAddNewContact(contact);
+    setContact({ ...initialState });
   };
 
   return (
@@ -29,7 +29,7 @@ const ContactForm = ({ onAddNewContact }) => {
           title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
           required
           onChange={onHandleChange}
-          value={state.name}
+          value={contact.name}
         />
       </label>
       <label>
@@ -41,7 +41,7 @@ const ContactForm = ({ onAddNewContact }) => {
           title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
           required
           onChange={onHandleChange}
-          value={state.number}
+          value={contact.number}
         />
       </label>
       <button type="submit">Add contact</button>
